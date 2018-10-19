@@ -1,5 +1,9 @@
 import pandas
 import numpy as np
+#take note, this mofo needs to be installed via pip
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 #Our case:
 #We have a mental health at work survey. Now we need to produce some valuable input for our supervisors
