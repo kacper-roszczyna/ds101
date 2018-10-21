@@ -1,8 +1,8 @@
 import pandas
 import numpy as np
 #take note, this mofo needs to be installed via pip
-import matplotlib
-matplotlib.use('Agg')
+#import matplotlib
+#matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 #Our case:
@@ -76,14 +76,34 @@ survey_dirty.reset_index(inplace=True, drop=True)
 with pandas.option_context('display.max_rows', None, 'display.max_columns', None):
     print(survey_dirty.head(5))
 
+survey = survey_dirty.copy()
+
 #at this point we have 265 cases which we can start working with
 #let's check a few things
 #1. count by age
+# Seeing as age is one of our columns and an int64 at that that can be pretty quickly done
+print(survey.age.value_counts())
 #2. avg age
+print(survey.age.mean())
 #3. median age
-#4. The percentage of men with difficulties who do not treat at all
+print(survey.age.median())
+#4. The percentage of men with difficulties who do not treat at all do not speak to boss
+# In older to get some data we will compare against our group without narrowing down
+base_group_counts = survey.mental_health_interview.value_counts()
+print(base_group_counts)
+
+untreated_men = survey[(survey.gender == 'm') &
+                       (survey.work_interfere != 'Never') &
+                       (survey.treatment == 'No')]
+print(untreated_men.mental_health_interview.value_counts())
+
+
+treated_men = survey[(survey.gender == 'm') &
+                       (survey.treatment == 'Yes')]
+treated_men_counts = treated_men.mental_health_interview.value_counts()
 
 
 #Ok, so now let's try to visualize something
-# How about percent of people with problems by company size
-# And another one: Number of people willing to talk by company size
+# How about the above cases: base_group_counts and untreated_men
+plt.figure()
+treated_men_counts.plot(kind = 'bar')
